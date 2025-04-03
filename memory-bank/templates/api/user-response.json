@@ -1,0 +1,34 @@
+{
+  "id": "{{userId}}",
+  "username": "{{username}}",
+  "email": "{{email}}",
+  "firstName": "{{firstName}}",
+  "lastName": "{{lastName}}",
+  "profileImage": "{{profileImageUrl}}",
+  "role": "{{role}}",
+  "permissions": [
+    {{#each permissions}}
+    "{{this}}"{{#unless @last}},{{/unless}}
+    {{/each}}
+  ],
+  "metadata": {
+    "createdAt": "{{createdAt}}",
+    "updatedAt": "{{updatedAt}}",
+    "lastLogin": "{{lastLogin}}"
+  },
+  "settings": {
+    "theme": "{{theme}}",
+    "language": "{{language}}",
+    "notifications": {
+      "email": {{emailNotifications}},
+      "push": {{pushNotifications}},
+      "inApp": {{inAppNotifications}}
+    }
+  },
+  "status": "{{status}}",
+  "links": {
+    "self": "/api/users/{{userId}}",
+    "profile": "/api/users/{{userId}}/profile",
+    "settings": "/api/users/{{userId}}/settings"
+  }
+}
