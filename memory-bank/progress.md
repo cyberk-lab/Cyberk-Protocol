@@ -170,25 +170,53 @@
 
 #### 4. Admin Features
 ##### 4.1 Dashboard
-- [ ] Statistics Display
-  - [ ] Show total member count
-  - [ ] Display system total assets
-  - [ ] Add real-time updates
-- [ ] Member Management
-  - [ ] Create member list table
-  - [ ] Implement member CRUD operations
-  - [ ] Add member search/filter
-  - [ ] Implement member disable/enable
+- [x] Statistics Display
+  - [x] Show total member count
+  - [x] Display system total assets
+  - [x] Add real-time updates
+  - [x] Show assets in both VND and CBK
+- [x] Member Management
+  - [x] Create member list table
+  - [x] Implement member CRUD operations
+  - [x] Add member search/filter
+  - [x] Implement member disable/enable
+  - [x] Add member status indicators (active/disabled)
 
 ##### 4.2 Member Operations
-- [ ] Reward System
-  - [ ] Create reward dialog
-  - [ ] Implement CBK token distribution
-  - [ ] Add transaction recording
-- [ ] Portfolio Viewing
-  - [ ] Add member portfolio view
-  - [ ] Implement detailed asset viewing
-  - [ ] Add transaction history
+- [x] Reward System
+  - [x] Create reward dialog
+  - [x] Add project name input
+  - [x] Add CBK amount input
+  - [x] Add transaction recording UI
+- [x] Portfolio Viewing
+  - [x] Add member portfolio view
+  - [x] Implement portfolio navigation
+  - [x] Add view details button
+
+##### 4.3 Admin Access Control
+- [x] Role-Based Access
+  - [x] Implement admin role check
+  - [x] Add route protection
+  - [x] Redirect non-admin users
+- [ ] Admin Account Management
+  - [x] Create default admin account (anderson@cyberk.io)
+  - [ ] Add admin creation interface
+  - [ ] Implement admin role assignment
+  - [ ] Add admin account settings
+
+##### 4.4 Admin Actions
+- [ ] Bulk Operations
+  - [ ] Add bulk user selection
+  - [ ] Implement bulk status updates
+  - [ ] Add bulk reward distribution
+- [ ] Audit System
+  - [ ] Track admin actions
+  - [ ] Create audit logs
+  - [ ] Add action history view
+- [ ] Data Export
+  - [ ] Add user data export
+  - [ ] Add transaction history export
+  - [ ] Generate reports
 
 #### 5. Roadmap/Badge System
 ##### 5.1 Badge Display

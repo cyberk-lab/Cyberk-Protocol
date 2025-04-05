@@ -15,6 +15,36 @@ export class UserSeedService {
   ) {}
 
   async run() {
+    // Create Anderson admin user
+    const andersonAdmin = await this.repository.count({
+      where: {
+        email: 'anderson@cyberk.io',
+      },
+    });
+
+    if (!andersonAdmin) {
+      const salt = await bcrypt.genSalt();
+      const password = await bcrypt.hash('123123', salt);
+
+      await this.repository.save(
+        this.repository.create({
+          firstName: 'Anderson',
+          lastName: 'CyberK',
+          email: 'anderson@cyberk.io',
+          password,
+          role: {
+            id: RoleEnum.admin,
+            name: 'Admin',
+          },
+          status: {
+            id: StatusEnum.active,
+            name: 'Active',
+          },
+        }),
+      );
+    }
+
+    // Create default admin if not exists
     const countAdmin = await this.repository.count({
       where: {
         role: {
@@ -45,6 +75,7 @@ export class UserSeedService {
       );
     }
 
+    // Create default user if not exists
     const countUser = await this.repository.count({
       where: {
         role: {
@@ -65,7 +96,7 @@ export class UserSeedService {
           password,
           role: {
             id: RoleEnum.user,
-            name: 'Admin',
+            name: 'User',
           },
           status: {
             id: StatusEnum.active,
