@@ -8,6 +8,7 @@ The Cyberk DApp follows a modern microservices architecture with clear separatio
 - Modern UI components using shadcn/ui and Radix UI
 - State management with React Query and React Hook Form
 - Responsive design with Tailwind CSS
+- PureComponent
 
 ### Backend Layer
 - NestJS-based REST API service

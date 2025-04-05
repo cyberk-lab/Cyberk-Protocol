@@ -15,6 +15,7 @@ globs: "*.js,*.jsx,*.ts,*.tsx,*.py,*.java,*.go,*.php,*.rb,*.swift,*.kt,*.dart,*.
 - Giới hạn độ phức tạp của hàm và lớp
 - Sử dụng comments khi cần thiết để giải thích ý định
 - Follow defensive programming practices
+- Không để một file chứa code lớn hơn 500 dòng
 
 ## Architecture
 - Phân chia rõ ràng các layer (presentation, business logic, data)

@@ -15,7 +15,7 @@
 - Code Quality: ESLint, Prettier
 - Date Handling: date-fns
 - Animations: Framer Motion
-
+- PureComponent
 ### Backend
 - Framework: NestJS 11
 - Language: TypeScript
