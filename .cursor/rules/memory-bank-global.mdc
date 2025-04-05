@@ -1,3 +1,8 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
 
 # Cline's Memory Bank
 
@@ -64,6 +69,7 @@ Create additional files/folders within memory-bank/ when they help organize:
 - API documentation
 - Testing strategies
 - Deployment procedures
+- decisions
 
 ## Core Workflows
 
@@ -108,8 +114,9 @@ flowchart TD
         P2[Document Current State]
         P3[Clarify Next Steps]
         P4[Update .clinerules]
+        p5[Update decisions]
         
-        P1 --> P2 --> P3 --> P4
+        P1 --> P2 --> P3 --> P4 --> p5
     end
     
     Start --> Process
