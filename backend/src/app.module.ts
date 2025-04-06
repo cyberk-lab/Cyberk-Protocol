@@ -27,6 +27,7 @@ import { MailerModule } from './mailer/mailer.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { MongooseConfigService } from './database/mongoose-config.service';
 import { DatabaseConfig } from './database/config/database-config.type';
+import { RewardsModule } from './rewards/rewards.module';
 
 // <database-block>
 const infrastructureDatabaseModule = (databaseConfig() as DatabaseConfig)
@@ -92,6 +93,9 @@ const infrastructureDatabaseModule = (databaseConfig() as DatabaseConfig)
     MailModule,
     MailerModule,
     HomeModule,
+    RewardsModule,
   ],
 })
-export class AppModule {}
+export class AppModule {
+  constructor(private dataSource: DataSource) {}
+}

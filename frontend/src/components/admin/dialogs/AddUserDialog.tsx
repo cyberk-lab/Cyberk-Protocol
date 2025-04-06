@@ -11,11 +11,13 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { AlertCircle } from 'lucide-react';
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 interface AddUserDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onAdd: (name: string, email: string, password: string) => void;
+  onAdd: (name: string, email: string, password: string, walletAddress: string) => void;
 }
 
 const AddUserDialog: React.FC<AddUserDialogProps> = memo(({
@@ -26,12 +28,14 @@ const AddUserDialog: React.FC<AddUserDialogProps> = memo(({
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [walletAddress, setWalletAddress] = useState('');
 
   const handleSubmit = () => {
-    onAdd(name, email, password);
+    onAdd(name, email, password, walletAddress);
     setName('');
     setEmail('');
     setPassword('');
+    setWalletAddress('');
   };
 
   return (
@@ -71,6 +75,21 @@ const AddUserDialog: React.FC<AddUserDialogProps> = memo(({
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter password"
               />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="wallet">Wallet Address</Label>
+              <Input
+                id="wallet"
+                value={walletAddress}
+                onChange={(e) => setWalletAddress(e.target.value)}
+                placeholder="Enter wallet address"
+              />
+              <Alert className="mt-2 border-yellow-500 bg-yellow-50 dark:bg-yellow-900/10">
+                <AlertCircle className="h-4 w-4 text-yellow-600 dark:text-yellow-400" />
+                <AlertDescription className="text-yellow-600 dark:text-yellow-400">
+                  This wallet address will be used to receive CBK token rewards. Please ensure it is correct.
+                </AlertDescription>
+              </Alert>
             </div>
           </div>
           <DialogFooter>

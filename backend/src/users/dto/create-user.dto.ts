@@ -10,6 +10,7 @@ import {
   IsNotEmpty,
   IsOptional,
   MinLength,
+  IsEthereumAddress,
 } from 'class-validator';
 import { FileDto } from '../../files/dto/file.dto';
 import { RoleDto } from '../../roles/dto/role.dto';
@@ -38,6 +39,15 @@ export class CreateUserDto {
   @ApiProperty({ example: 'Doe', type: String })
   @IsNotEmpty()
   lastName: string | null;
+
+  @ApiPropertyOptional({
+    example: '0x1234567890abcdef',
+    description: 'Ethereum wallet address for receiving rewards',
+    type: String,
+  })
+  @IsOptional()
+  @IsEthereumAddress()
+  walletAddress?: string | null;
 
   @ApiPropertyOptional({ type: () => FileDto })
   @IsOptional()

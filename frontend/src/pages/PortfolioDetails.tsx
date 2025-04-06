@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import BackgroundEffects from '@/components/BackgroundEffects';
@@ -16,46 +15,27 @@ import {
 import { formatNumber } from '@/lib/utils';
 import Header from '@/components/Header';
 import WithdrawDialog from '@/components/WithdrawDialog';
-
-const assetData = [
-  { 
-    name: 'Lương tháng 13', 
-    amountVND: 3000000, 
-    amountCBK: 120000 
-  },
-  { 
-    name: '$CBK', 
-    amountVND: 12000000, 
-    amountCBK: 480000 
-  },
-  { 
-    name: 'Thưởng dự án', 
-    amountVND: 20000000, 
-    amountCBK: 800000 
-  },
-  { 
-    name: 'Lương trách nhiệm', 
-    amountVND: 10000000, 
-    amountCBK: 400000 
-  }
-];
-
-const totalVND = assetData.reduce((sum, asset) => sum + asset.amountVND, 0);
-const totalCBK = assetData.reduce((sum, asset) => sum + asset.amountCBK, 0);
+import { usePortfolio } from '@/contexts/PortfolioContext';
+import { format } from 'date-fns';
 
 const PortfolioDetails: React.FC = () => {
   const [isCbkMode, setIsCbkMode] = useState(false);
   const [userName, setUserName] = useState<string>('');
   const [withdrawDialogOpen, setWithdrawDialogOpen] = useState(false);
   const [selectedAsset, setSelectedAsset] = useState<{ name: string; amountCBK: number } | null>(null);
+  const { rewards, loading, fetchRewards, totalAmount } = usePortfolio();
 
   useEffect(() => {
-    // Get user name from sessionStorage if exists (set in Admin page)
+    // Get user name and id from sessionStorage if exists (set in Admin page)
     const storedUserName = sessionStorage.getItem('viewedUserName');
+    const storedUserId = sessionStorage.getItem('viewedUserId');
     if (storedUserName) {
       setUserName(storedUserName);
     }
-  }, []);
+    if (storedUserId && !loading && rewards.length === 0) {
+      fetchRewards(parseInt(storedUserId));
+    }
+  }, [fetchRewards, loading, rewards.length]);
 
   const toggleCurrency = () => {
     setIsCbkMode(!isCbkMode);
@@ -70,7 +50,7 @@ const PortfolioDetails: React.FC = () => {
     <div className="min-h-screen w-full bg-white dark:bg-black">
       <Header />
       
-      <div className="pt-20 max-w-2xl mx-auto px-4">
+      <div className="pt-20 max-w-4xl mx-auto px-4">
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -78,22 +58,9 @@ const PortfolioDetails: React.FC = () => {
           transition={{ duration: 0.3 }}
         >
           <div className="flex justify-between items-center mb-6">
-            <div>
-              <h1 className="text-xl font-medium font-fauna">Portfolio Details</h1>
-              {userName && (
-                <p className="text-gray-600 dark:text-gray-400 mt-1">
-                  User: <span className="font-medium">{userName}</span>
-                </p>
-              )}
-            </div>
-            <Button 
-              variant="outline" 
-              size="sm" 
-              onClick={toggleCurrency}
-              className="border-black dark:border-white hover:bg-black/5 dark:hover:bg-white/10"
-            >
-              {isCbkMode ? 'Show VND' : 'Show $CBK'}
-            </Button>
+            <h1 className="text-xl font-medium text-gray-800 dark:text-gray-200">
+              {userName}'s Portfolio
+            </h1>
           </div>
           
           <motion.div
@@ -104,26 +71,10 @@ const PortfolioDetails: React.FC = () => {
           >
             <div className="flex justify-between items-center">
               <div>
-                <p className="text-gray-500 dark:text-gray-400 text-sm mb-2">Total Assets</p>
+                <p className="text-gray-500 dark:text-gray-400 text-sm mb-2">Total $CBK</p>
                 <h2 className="text-3xl font-bold fauna-title mb-1">
-                  {isCbkMode 
-                    ? <>{formatNumber(totalCBK)} <span className="text-3xl">$CBK</span></>
-                    : <>{formatNumber(totalCBK)} <span className="text-3xl">$CBK</span></>
-                  }
+                  {formatNumber(totalAmount)} <span className="text-3xl">$CBK</span>
                 </h2>
-                <p className="text-gray-500 dark:text-gray-400 text-xs">
-                  {isCbkMode 
-                    ? `${formatNumber(totalVND)}đ` 
-                    : `${formatNumber(totalVND)}đ`
-                  }
-                </p>
-              </div>
-              <div className="flex items-center gap-2 bg-gray-100 dark:bg-gray-800 rounded p-3 shadow-sm">
-                <Calendar className="h-5 w-5 text-gray-500 dark:text-gray-400" />
-                <div>
-                  <p className="text-gray-500 dark:text-gray-400 text-xs">Unlock date</p>
-                  <p className="text-gray-900 dark:text-white text-sm">31/12/2025</p>
-                </div>
               </div>
             </div>
           </motion.div>
@@ -139,37 +90,53 @@ const PortfolioDetails: React.FC = () => {
                 <TableHeader className="bg-gray-50 dark:bg-gray-900">
                   <TableRow className="hover:bg-gray-100 dark:hover:bg-gray-800">
                     <TableHead className="text-gray-500 dark:text-gray-400 font-medium">Asset Type</TableHead>
-                    <TableHead className="text-gray-500 dark:text-gray-400 font-medium text-right">
-                      Amount
-                    </TableHead>
+                    <TableHead className="text-gray-500 dark:text-gray-400 font-medium text-right">Amount</TableHead>
+                    <TableHead className="text-gray-500 dark:text-gray-400 font-medium text-right">Unlock Time</TableHead>
                     <TableHead className="text-gray-500 dark:text-gray-400 font-medium text-right w-24">Action</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {assetData.map((asset, index) => (
-                    <TableRow key={index} className="hover:bg-gray-100 dark:hover:bg-gray-800 border-t border-gray-200 dark:border-gray-800">
-                      <TableCell className="font-medium">{asset.name}</TableCell>
-                      <TableCell className="text-right">
-                        <div className="font-medium text-lg">
-                          {formatNumber(asset.amountCBK)} <span className="font-medium">$CBK</span>
-                        </div>
-                        <div className="text-gray-500 dark:text-gray-400 text-xs">
-                          {formatNumber(asset.amountVND)}đ
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <Button 
-                          variant="outline" 
-                          size="sm"
-                          className="border-black dark:border-white hover:bg-black/5 dark:hover:bg-white/10"
-                          onClick={() => handleWithdraw(asset)}
-                        >
-                          <Download className="h-4 w-4 mr-1" />
-                          Withdraw
-                        </Button>
+                  {loading ? (
+                    <TableRow>
+                      <TableCell colSpan={4} className="text-center py-8">
+                        Loading...
                       </TableCell>
                     </TableRow>
-                  ))}
+                  ) : rewards.length === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={4} className="text-center py-8">
+                        No rewards found
+                      </TableCell>
+                    </TableRow>
+                  ) : (
+                    rewards.map((reward) => (
+                      <TableRow key={reward.id} className="hover:bg-gray-100 dark:hover:bg-gray-800 border-t border-gray-200 dark:border-gray-800">
+                        <TableCell className="font-medium">{reward.projectName}</TableCell>
+                        <TableCell className="text-right">
+                          <div className="font-medium text-lg">
+                            {formatNumber(reward.amount)} <span className="font-medium">$CBK</span>
+                          </div>
+                        </TableCell>
+                        <TableCell className="text-right">
+                          {format(new Date(reward.unlockTime), 'dd/MM/yyyy')}
+                        </TableCell>
+                        <TableCell className="text-right">
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            className="border-black dark:border-white hover:bg-black/5 dark:hover:bg-white/10"
+                            onClick={() => handleWithdraw({
+                              name: reward.projectName,
+                              amountCBK: reward.amount
+                            })}
+                          >
+                            <Download className="h-4 w-4 mr-1" />
+                            Withdraw
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  )}
                 </TableBody>
               </Table>
             </div>

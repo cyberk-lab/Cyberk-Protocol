@@ -55,6 +55,14 @@ export class User {
   lastName: string | null;
 
   @ApiProperty({
+    type: String,
+    example: '0x1234567890abcdef',
+    description: 'Ethereum wallet address for receiving rewards',
+  })
+  @Expose({ groups: ['me', 'admin'] })
+  walletAddress?: string | null;
+
+  @ApiProperty({
     type: () => FileType,
   })
   photo?: FileType | null;

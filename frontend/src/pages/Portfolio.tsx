@@ -1,57 +1,39 @@
-
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import BackgroundEffects from '@/components/BackgroundEffects';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
-import { Wallet, ChevronRight } from 'lucide-react';
+import { ArrowRight, Calendar, Download } from 'lucide-react';
 import { formatNumber } from '@/lib/utils';
 import Header from '@/components/Header';
-import TransactionHistory from '@/components/TransactionHistory';
-import { Switch } from '@/components/ui/switch';
-
-const transactions = [
-  {
-    id: 1,
-    amount: 3000000,
-    amountCBK: 12000,
-    description: 'Thưởng dự án LYNK',
-    date: '15/06/2023',
-    isPositive: true
-  },
-  {
-    id: 2,
-    amount: 500000,
-    amountCBK: 2000,
-    description: 'Thưởng dự án Oracler',
-    date: '22/05/2023',
-    isPositive: true
-  }
-];
+import { usePortfolio } from '@/contexts/PortfolioContext';
+import { useAuth } from '@/contexts/AuthContext';
+import { format } from 'date-fns';
+import { 
+  Table, 
+  TableBody, 
+  TableCell, 
+  TableHead, 
+  TableHeader, 
+  TableRow 
+} from '@/components/ui/table';
 
 const Portfolio: React.FC = () => {
-  const [totalAssets, setTotalAssets] = useState(10200000);
-  const [isCbkMode, setIsCbkMode] = useState(false);
-  const CBK_RATE = 25; // 1 CBK = 25 VND
+  const { rewards, loading, fetchRewards, totalAmount } = usePortfolio();
+  const { user } = useAuth();
 
-  // Increase totalAssets by 25 every second
   useEffect(() => {
-    const interval = setInterval(() => {
-      setTotalAssets(prevTotal => prevTotal + 25);
-    }, 1000);
-    
-    return () => clearInterval(interval);
-  }, []);
-
-  const toggleCurrency = () => {
-    setIsCbkMode(!isCbkMode);
-  };
+    const userId = user?.id;
+    if (userId && !loading && rewards.length === 0) {
+      fetchRewards(Number(userId));
+    }
+  }, [user?.id, fetchRewards, loading, rewards.length]);
 
   return (
-    <div className="min-h-screen w-full bg-white">
+    <div className="min-h-screen w-full bg-white dark:bg-black">
       <Header />
       
-      <div className="pt-20 max-w-md mx-auto px-4">
+      <div className="pt-20 max-w-4xl mx-auto px-4">
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -59,68 +41,94 @@ const Portfolio: React.FC = () => {
           transition={{ duration: 0.3 }}
         >
           <div className="flex justify-between items-center mb-6">
-            <h1 className="text-xl font-medium text-gray-800">Portfolio Overview</h1>
-            <div className="flex items-center gap-2">
-              <span className="text-sm text-gray-500">VND</span>
-              <Switch 
-                checked={isCbkMode} 
-                onCheckedChange={toggleCurrency}
-              />
-              <span className="text-sm text-gray-500">$CBK</span>
-            </div>
+            <h1 className="text-xl font-medium text-gray-800 dark:text-gray-200">
+              Portfolio Overview
+            </h1>
           </div>
           
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="mb-8 bg-white rounded-lg border border-[#E0E0E0] p-6 shadow-sm"
+            className="mb-6 bg-gray-50 dark:bg-gray-900 rounded-md p-6 shadow-sm"
           >
-            <p className="text-gray-500 text-sm mb-2">Total Assets</p>
-            <h2 className="text-4xl font-bold text-gray-800 mb-1">
-              {isCbkMode 
-                ? <>{formatNumber(totalAssets / CBK_RATE)} <span className="text-3xl">$CBK</span></>
-                : <>{formatNumber(totalAssets / CBK_RATE)} <span className="text-3xl">$CBK</span></>
-              }
-            </h2>
-            <p className="text-gray-500 text-xs">
-              {isCbkMode 
-                ? `${formatNumber(totalAssets)}đ` 
-                : `${formatNumber(totalAssets)}đ`
-              }
-            </p>
+            <div className="flex justify-between items-center">
+              <div>
+                <p className="text-gray-500 dark:text-gray-400 text-sm mb-2">Total $CBK</p>
+                <h2 className="text-3xl font-bold fauna-title mb-1">
+                  {formatNumber(totalAmount)} <span className="text-3xl">$CBK</span>
+                </h2>
+              </div>
+            </div>
           </motion.div>
           
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="mb-8"
+            className="mb-6"
           >
-            <Button 
-              className="w-full py-6 text-base font-medium bg-[#3D88CF] hover:bg-[#3678B5] text-white"
-              asChild
-            >
-              <Link to="/portfolio-details" className="flex justify-between items-center">
-                <div className="flex items-center">
-                  <Wallet className="mr-2 h-5 w-5" />
-                  View Asset Details
-                </div>
-                <ChevronRight className="h-5 w-5" />
-              </Link>
-            </Button>
+            <div className="rounded-md overflow-hidden border border-gray-200 dark:border-gray-800 shadow-sm">
+              <Table>
+                <TableHeader className="bg-gray-50 dark:bg-gray-900">
+                  <TableRow className="hover:bg-gray-100 dark:hover:bg-gray-800">
+                    <TableHead className="text-gray-500 dark:text-gray-400 font-medium">Project</TableHead>
+                    <TableHead className="text-gray-500 dark:text-gray-400 font-medium text-right">Amount</TableHead>
+                    <TableHead className="text-gray-500 dark:text-gray-400 font-medium text-right">Unlock Date</TableHead>
+                    <TableHead className="text-gray-500 dark:text-gray-400 font-medium">Message</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {loading ? (
+                    <TableRow>
+                      <TableCell colSpan={4} className="text-center py-8">
+                        Loading...
+                      </TableCell>
+                    </TableRow>
+                  ) : rewards.length === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={4} className="text-center py-8">
+                        No rewards found
+                      </TableCell>
+                    </TableRow>
+                  ) : (
+                    rewards.slice(0, 4).map((reward) => (
+                      <TableRow key={reward.id} className="hover:bg-gray-100 dark:hover:bg-gray-800 border-t border-gray-200 dark:border-gray-800">
+                        <TableCell className="font-medium">{reward.projectName}</TableCell>
+                        <TableCell className="text-right">
+                          <div className="font-medium">
+                            {formatNumber(reward.amount)} <span>$CBK</span>
+                          </div>
+                        </TableCell>
+                        <TableCell className="text-right">
+                          {format(new Date(reward.unlockTime), 'dd/MM/yyyy')}
+                        </TableCell>
+                        <TableCell className="text-sm text-gray-500 dark:text-gray-400 truncate max-w-[200px]">
+                          {reward.message}
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  )}
+                </TableBody>
+              </Table>
+            </div>
           </motion.div>
           
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="mb-4"
+            className="flex gap-4"
           >
-            <TransactionHistory 
-              transactions={transactions} 
-              isCbkMode={isCbkMode} 
-            />
+            <Button 
+              className="flex-1 bg-black hover:bg-gray-800 text-white"
+              asChild
+            >
+              <Link to="/portfolio/details">
+                View All Assets
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Link>
+            </Button>
           </motion.div>
         </motion.div>
       </div>

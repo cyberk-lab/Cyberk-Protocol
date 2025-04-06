@@ -9,7 +9,7 @@ interface AdminContextType {
   handleUpdateUser: (userId: number, firstName: string, lastName: string) => Promise<void>;
   handleToggleUserStatus: (userId: number, currentStatus: number) => Promise<void>;
   handleDeleteUser: (userId: number) => Promise<void>;
-  handleReward: (userId: number, amount: number, projectName: string) => Promise<void>;
+  handleReward: (userId: number, amount: number, projectName: string, unlockTime: string, message: string) => Promise<void>;
 }
 
 const AdminContext = createContext<AdminContextType | undefined>(undefined);
@@ -216,7 +216,7 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
   };
 
-  const handleReward = async (userId: number, amount: number, projectName: string) => {
+  const handleReward = async (userId: number, amount: number, projectName: string, unlockTime: string, message: string) => {
     try {
       const response = await fetch(`http://localhost:3000/api/v1/rewards`, {
         method: 'POST',
@@ -225,9 +225,11 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
         },
         body: JSON.stringify({
-          userId,
+          user: { id: userId },
           amount,
           projectName,
+          unlockTime,
+          message
         }),
       });
 

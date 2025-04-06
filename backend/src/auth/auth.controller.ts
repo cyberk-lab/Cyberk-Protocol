@@ -53,7 +53,9 @@ export class AuthController {
   @SerializeOptions({
     groups: ['me'],
   })
-  async register(@Body() createUserDto: AuthRegisterLoginDto): Promise<LoginResponseDto> {
+  async register(
+    @Body() createUserDto: AuthRegisterLoginDto,
+  ): Promise<LoginResponseDto> {
     return this.service.register(createUserDto);
   }
 

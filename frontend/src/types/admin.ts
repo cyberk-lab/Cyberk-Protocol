@@ -3,6 +3,7 @@ export interface User {
   firstName: string;
   lastName: string;
   email: string;
+  walletAddress?: string;
   role: {
     id: number;
   };
@@ -20,9 +21,9 @@ export type AdminContextType = {
   users: User[];
   loading: boolean;
   fetchUsers: () => Promise<void>;
-  handleAddUser: (name: string, email: string, password: string) => Promise<void>;
+  handleAddUser: (name: string, email: string, password: string, walletAddress: string) => Promise<void>;
   handleUpdateUser: (userId: number, firstName: string, lastName: string) => Promise<void>;
   handleToggleUserStatus: (userId: number, currentStatus: number) => Promise<void>;
   handleDeleteUser: (userId: number) => Promise<void>;
-  handleReward: (userId: number, amount: number, projectName: string) => Promise<void>;
+  handleReward: (userId: number, amount: number, projectName: string, unlockTime: string, message: string) => Promise<void>;
 }; 

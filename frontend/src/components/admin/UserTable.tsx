@@ -51,6 +51,7 @@ const UserTable: React.FC<UserTableProps> = ({ users, onEdit, onToggleStatus, on
             <TableHead>ID</TableHead>
             <TableHead>Name</TableHead>
             <TableHead>Email</TableHead>
+            <TableHead>Wallet Address</TableHead>
             <TableHead>Status</TableHead>
             <TableHead className="text-right">Actions</TableHead>
           </TableRow>
@@ -61,6 +62,15 @@ const UserTable: React.FC<UserTableProps> = ({ users, onEdit, onToggleStatus, on
               <TableCell>{user.id}</TableCell>
               <TableCell>{`${user.firstName} ${user.lastName}`}</TableCell>
               <TableCell>{user.email}</TableCell>
+              <TableCell>
+                <span className="font-mono text-sm">
+                  {user.walletAddress ? (
+                    `${user.walletAddress.slice(0, 6)}...${user.walletAddress.slice(-4)}`
+                  ) : (
+                    <span className="text-gray-400 dark:text-gray-500">Not set</span>
+                  )}
+                </span>
+              </TableCell>
               <TableCell>
                 <span className={`px-2 py-1 rounded-full text-xs ${
                   user.status.id === 1 ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
@@ -163,6 +173,7 @@ const UserTable: React.FC<UserTableProps> = ({ users, onEdit, onToggleStatus, on
         open={rewardDialogOpen}
         onOpenChange={setRewardDialogOpen}
         user={selectedUser}
+        users={users}
         onReward={onReward}
       />
     </>
