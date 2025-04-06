@@ -1,16 +1,18 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { formatNumber } from '@/lib/utils';
+import { cn } from '@/lib/utils';
+import { PortfolioHeaderProps } from '@/types/portfolio';
 
-interface PortfolioHeaderProps {
-  totalAmount: number;
-  title: string;
-}
-
-export const PortfolioHeader: React.FC<PortfolioHeaderProps> = React.memo(({ totalAmount, title }) => {
+export const PortfolioHeader: React.FC<PortfolioHeaderProps> = React.memo(({ 
+  totalAmount, 
+  title,
+  className,
+  testId
+}) => {
   return (
     <>
-      <div className="flex justify-between items-center mb-6">
+      <div className={cn("flex justify-between items-center mb-6", className)} data-testid={testId}>
         <h1 className="text-xl font-medium text-gray-800 dark:text-gray-200">
           {title}
         </h1>
@@ -33,4 +35,6 @@ export const PortfolioHeader: React.FC<PortfolioHeaderProps> = React.memo(({ tot
       </motion.div>
     </>
   );
-}); 
+});
+
+PortfolioHeader.displayName = 'PortfolioHeader'; 

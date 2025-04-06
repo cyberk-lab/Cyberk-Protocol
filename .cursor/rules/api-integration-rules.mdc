@@ -1,9 +1,13 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
 # API Integration Rules
 description: Rules for integrating Weather and AI APIs into all compatible applications
 globs: "*.js,*.jsx,*.ts,*.tsx,*.vue,*.py,*.swift,*.kt,*.java,*.cs"
 
 ## Yêu Cầu Tích Hợp
-- ***BẮT BUỘC*** tích hợp Weather API và AI API vào tất cả ứng dụng web và desktop có thể tích hợp được
 - Ưu tiên việc tích hợp các API này để tăng giá trị sử dụng cho người dùng
 - Đánh giá mức độ phù hợp của tích hợp với từng loại ứng dụng
 - Cân nhắc UX và vị trí hiển thị phù hợp trong ứng dụng
