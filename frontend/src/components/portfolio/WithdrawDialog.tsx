@@ -10,11 +10,7 @@ interface WithdrawDialogProps {
   asset: Asset | null;
 }
 
-export const WithdrawDialog: React.FC<WithdrawDialogProps> = ({ 
-  open, 
-  onOpenChange, 
-  asset 
-}) => {
+export const WithdrawDialog: React.FC<WithdrawDialogProps> = ({ open, onOpenChange, asset }) => {
   if (!asset) return null;
 
   const handleWithdraw = async () => {
@@ -28,38 +24,21 @@ export const WithdrawDialog: React.FC<WithdrawDialogProps> = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent>
         <DialogHeader>
           <DialogTitle>Withdraw {asset.name}</DialogTitle>
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <div className="space-y-2">
-            <p className="text-sm text-gray-500 dark:text-gray-400">
-              You are about to withdraw:
-            </p>
+            <p className="text-sm text-gray-500">Amount to withdraw:</p>
             <p className="text-2xl font-semibold">
               {formatNumber(asset.amountCBK)} <span className="text-lg">$CBK</span>
             </p>
           </div>
-          <div className="space-y-2">
-            <p className="text-sm text-gray-500 dark:text-gray-400">
-              Please confirm that you want to withdraw these tokens to your wallet.
-            </p>
-          </div>
         </div>
         <div className="flex justify-end gap-3">
-          <Button 
-            variant="outline" 
-            onClick={() => onOpenChange(false)}
-          >
-            Cancel
-          </Button>
-          <Button 
-            onClick={handleWithdraw}
-            className="bg-black hover:bg-gray-800 text-white"
-          >
-            Confirm Withdrawal
-          </Button>
+          <Button variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
+          <Button onClick={handleWithdraw}>Confirm Withdrawal</Button>
         </div>
       </DialogContent>
     </Dialog>

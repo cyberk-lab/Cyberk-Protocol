@@ -31,7 +31,7 @@ const App = () => (
               <Route path="/create-account" element={<CreateAccount />} />
               <Route path="/welcome" element={<ProtectedRoute><div>Welcome Page</div></ProtectedRoute>} />
               <Route path="/portfolio" element={<Portfolio />} />
-              <Route path="/portfolio-details" element={<PortfolioDetails />} />
+              <Route path="/portfolio/details" element={<PortfolioDetails />} />
               <Route path="/admin" element={<ProtectedRoute><Admin /></ProtectedRoute>} />
               <Route path="/swap" element={<Swap />} />
               <Route path="/roadmap" element={<Roadmap />} />

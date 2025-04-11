@@ -52,3 +52,5 @@ export const PortfolioDetails = () => {
 };
 
 PortfolioDetails.displayName = 'PortfolioDetails';
+
+export default PortfolioDetails;

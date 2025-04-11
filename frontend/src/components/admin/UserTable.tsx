@@ -24,7 +24,7 @@ interface UserTableProps {
   onEdit: (user: User) => void;
   onToggleStatus: (userId: number, currentStatus: number) => Promise<void>;
   onDelete: (user: User) => void;
-  onReward: (userId: number, amount: number, projectName: string) => Promise<void>;
+  onReward: (userId: number, amount: number, projectName: string, unlockTime: string, message: string) => Promise<void>;
 }
 
 const UserTable: React.FC<UserTableProps> = ({ users, onEdit, onToggleStatus, onDelete, onReward }) => {
